@@ -40,7 +40,7 @@ export function TablePatients(props: any) {
             </tr>
           </thead>
           <tbody>
-            {props.data.map((item, i) => (
+            {props.data.map((item: any, i: any) => (
               <tr className="bg-[#414141] text-white text-sm font-semibold border-b-2" key={item.id}>
                 <td className="px-6 py-2">
                   <span className="font-bold">{i+1}</span>

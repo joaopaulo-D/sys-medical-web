@@ -68,7 +68,7 @@ export default function Map() {
         />
       ) : null}
       <div className="sm:ml-64 flex sm:mr-64 h-screen bg-black">
-        {patient?.map((item) => (
+        {patient?.map((item: any) => (
           <>
             <div key={item.id} className="w-full border-2">
               <div className="flex justify-between text-orange-400 text-sm">
