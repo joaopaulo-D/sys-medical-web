@@ -4,9 +4,7 @@ import { storage, database } from "@/lib/firebase/config/firebase";
 import { ref as refStorage, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ref as refDataset, serverTimestamp, set, push, child } from 'firebase/database';
 
-import * as yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup'
-import { SubmitHandler, useForm } from "react-hook-form";
+import { X } from "lucide-react";
 
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -37,13 +35,29 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
   const [body, setBody] = useState<string>('')
   const [modality, setModality] = useState<string>('')
   const [medicine, setMedicine] = useState<string>('')
-  const [typeMedicine, setTypeMedicine] = useState<string>('')
+  const [typeMedicine, setTypeMedicine] = useState<string[]>([])
 
   const [file, setFile] = useState<any | null>(null)
   const [status, setStatus] = useState<Status>('waiting')
   const [loading, setLoading] = useState<boolean>(false)
 
   const contextAuth = useAuthenticationContext()
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") return
+
+    const value = event.currentTarget.value
+
+    if (!value.trim()) return
+
+    setTypeMedicine([...typeMedicine, value])
+
+    event.currentTarget.value = ""
+  }
+
+  const removeTag = (index: number) => {
+    setTypeMedicine(typeMedicine.filter((el, i) => i !== index))
+  }
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -203,13 +217,21 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
                         <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
                           Qual Medicamento ? *
                         </label>
-                        <Input
-                          className="bg-[#333232]"
-                          placeholder=""
-                          type="text"
-                          onChange={(value) => setTypeMedicine(value.target.value)}
-                          required
-                        />
+                        <div>
+                          <Input
+                            className="bg-[#333232]"
+                            placeholder=""
+                            type="text"
+                            onKeyDown={handleKeyDown}
+                            required
+                          />
+                          {typeMedicine.map((tag, index) => (
+                            <div className="bg-white inline-flex items-center text-sm text-black rounded mt-1 mr-1 overflow-hidden" key={index}>
+                              <span className="ml-2 leading-relaxed truncate max-w-xs px-1" x-text="tag">{tag}</span>
+                              <X color="black" size={15} onClick={() => removeTag(index)}/>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     ) : null}
                   </div>

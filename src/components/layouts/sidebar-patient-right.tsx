@@ -9,10 +9,12 @@ import { twMerge } from "tailwind-merge";
 interface IProps {
   image: string;
   medicine: string;
-  typeMedicine: string;
+  typeMedicine: string[];
 }
 
 export default function SideBarRight({ image, medicine, typeMedicine }: IProps) {
+
+  console.log(typeMedicine)
 
   const [classify, setClassify] = useState<any>();
 
@@ -87,14 +89,27 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
       <div className="w-full p-4 space-y-2">
         <h1 className="uppercase text-sm font-bold">Medicamentos</h1>
         <div className="w-full">
-          <span className={twMerge(
-            "text-white text-sm font-medium me-2 px-2.5 py-0.5 rounded",
-            typeMedicine ? "bg-orange-500" : "bg-green-500"
-          )}>
-            {typeMedicine ? typeMedicine : "Sem uso de medicamento"}
-          </span>
+
+          {typeMedicine?.map((tags: any, i: any) => (
+            <div className="w-full">
+              <span className={twMerge(
+                "text-black text-sm font-medium me-1 px-2.5 py-0.5 rounded",
+                "bg-white"
+              )}>
+                {tags}
+              </span>
+            </div>
+          ))}
+          {!typeMedicine ? (
+            <span className={twMerge(
+              "text-black text-sm font-medium px-2.5 py-0.5 rounded",
+              "bg-white"
+            )}>
+              Sem uso de medicamentos
+            </span>
+          ) : null}
         </div>
       </div>
-    </aside>
+    </aside >
   )
 }

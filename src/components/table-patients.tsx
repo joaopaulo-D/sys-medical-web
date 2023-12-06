@@ -65,14 +65,14 @@ export function TablePatients(props: any) {
                   <span>{item.patient_body}</span>
                 </td>
                 <td className="py-2 flex space-x-3">
-                  <Link href={`/dashboard/fishing/vessels/map/1`} className="flex items-center space-x-1 hover:text-gray-300">
+                  <Link href={`#`} className="flex items-center space-x-1 hover:text-gray-300">
                     <Trash2
                       size={18}
                       color="red"
                       className="cursor-pointer"
                     />
                   </Link>
-                  <Link href={`/dashboard/fishing/vessels/map/1`} className="flex items-center space-x-1 hover:text-gray-300">
+                  <Link href={`#`} className="flex items-center space-x-1 hover:text-gray-300">
                     <Edit
                       size={18}
                       color="orange"
