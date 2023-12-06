@@ -12,6 +12,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
+import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
+
 type CreateProps = {
   setOpen: any;
   open: boolean
@@ -34,11 +36,14 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
   const [gender, setGender] = useState<string>('')
   const [body, setBody] = useState<string>('')
   const [modality, setModality] = useState<string>('')
+  const [medicine, setMedicine] = useState<string>('')
+  const [typeMedicine, setTypeMedicine] = useState<string>('')
+
   const [file, setFile] = useState<any | null>(null)
   const [status, setStatus] = useState<Status>('waiting')
   const [loading, setLoading] = useState<boolean>(false)
 
-  // const contextAuth = useAuthenticationContext()
+  const contextAuth = useAuthenticationContext()
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -48,7 +53,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
 
   const handleCreatePatient = async (event: React.FormEvent) => {
     event.preventDefault()
-    
+
     try {
       setLoading(true)
       setStatus("uploading")
@@ -60,7 +65,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
       const getUrlUploadFile = await getDownloadURL(storageRef);
       //const uploadsRef = refDataset(database, `doctors/KpsKsazTVYhTdjDkHPAB4nS3Agh2/uploads/`);
       setStatus("generating")
-      const newUploadsRef = push(child(refDataset(database), `doctors/KpsKsazTVYhTdjDkHPAB4nS3Agh2/patients/`))
+      const newUploadsRef = push(child(refDataset(database), `doctors/${contextAuth?.user?.uid}/patients/`))
       await set(newUploadsRef, {
         sample_name: file.name,
         sample_url: getUrlUploadFile,
@@ -72,6 +77,8 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
         patient_gender: gender,
         patient_body: body,
         patient_modality: modality,
+        patient_medicine: medicine,
+        patient_typeMedicine: typeMedicine,
         created_at: new Date().toLocaleString()
       })
       setStatus("success")
@@ -169,7 +176,42 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
                         </Select>
                       </div>
                     </div>
-
+                  </div>
+                  <div className="flex flex-wrap -mx-3 mb-6">
+                    <div className="w-full md:w-1/2 px-3">
+                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
+                        faz uso de medicamento ? *
+                      </label>
+                      <div>
+                        <Select onValueChange={(value) => setMedicine(value)} required>
+                          <SelectTrigger className="bg-[#333232]">
+                            <SelectValue placeholder="" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="sim">
+                              Sim
+                            </SelectItem>
+                            <SelectItem value="nao">
+                              Não
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    {medicine == "sim" ? (
+                      <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                        <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
+                          Qual Medicamento ? *
+                        </label>
+                        <Input
+                          className="bg-[#333232]"
+                          placeholder=""
+                          type="text"
+                          onChange={(value) => setTypeMedicine(value.target.value)}
+                          required
+                        />
+                      </div>
+                    ) : null}
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full md:w-1/2 px-3">

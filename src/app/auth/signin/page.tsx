@@ -7,7 +7,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
 
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator";
 
 import * as yup from "yup";
 
@@ -47,7 +46,7 @@ export default function SignIn() {
     <div className='grid grid-cols-1 sm:grid-cols-2 h-screen w-full'>
       <div className='bg-[#FAFCFC] flex flex-col justify-center'>
         <form onSubmit={handleSubmit(handleSignIn)} className='max-w-[400px] w-full mx-auto rounded-lg p-8 px-8 space-y-4'>
-          <h1 className="text-black text-center text-3xl"><span className="text-orange-500">SYS</span> MEDICAL</h1>
+          <h1 className="text-black text-center text-3xl"><span className="text-orange-500">SysLae</span> Health</h1>
           <h2 className='text-xl text-black font-normal text-center'>Acesse sua conta</h2>
           <div className='flex flex-col text-gray-400 py-2'>
             <Input

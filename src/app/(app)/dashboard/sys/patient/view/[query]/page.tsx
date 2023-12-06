@@ -11,11 +11,13 @@ import { database } from "@/lib/firebase/config/firebase";
 import { ref, get, onValue } from 'firebase/database';
 
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx"
-import { convertTimeStampToString } from "@/lib/date"
+
+import { api } from "@/lib/sys/api/api"
 
 export default function Map() {
 
   const [patient, setPatient] = useState<any>();
+  const [classify, setClassify] = useState<any>()
   const [loading, setLoading] = useState<boolean>(false);
 
   const params = useParams()
@@ -43,6 +45,7 @@ export default function Map() {
         setPatient(res);
       });
 
+
     } catch (error) {
       console.error(error)
     }
@@ -61,6 +64,7 @@ export default function Map() {
           id={patient[0]?.id}
           modality={patient[0]?.patient_modality}
           patient={patient[0]?.patient_first_name}
+          key={patient[0]?.id}
         />
       ) : null}
       <div className="sm:ml-64 flex sm:mr-64 h-screen bg-black">
@@ -109,7 +113,9 @@ export default function Map() {
           </>
         ))}
       </div>
-      <SideBarRight />
+      {patient?.length > 0 ? (
+        <SideBarRight image={patient[0].sample_url} medicine={patient[0].patient_medicine} typeMedicine={patient[0].patient_typeMedicine}/>
+      ) : null}
     </div>
   )
 }

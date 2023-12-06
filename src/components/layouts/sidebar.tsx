@@ -32,22 +32,21 @@ export function Sidebar() {
           </NavLink>
         </li>
         <li>
-          <NavLink href="/dashboard/sys/settings">
+          <NavLink href="#">
             <Info size={25} color="white" />
             <span className="text-[10px]">Informações</span>
           </NavLink>
         </li>
         <li>
-          <NavLink href="/dashboard/sys/settings">
+          <NavLink href="#">
             <Settings size={25} color="white" />
             <span className="text-[10px]">Configurações</span>
           </NavLink>
         </li>
       </ul>
       <div className="absolute bottom-3 left-2 space-y-3">
-        <NavLink href="/dashboard/sys/settings">
+        <NavLink href="#">
           <User size={25} color="white" />
-          <span>Dr. Admin</span>
         </NavLink>
         <Button variant="link" onClick={() => contextAuth?.logout()}>
           <LogOut size={25} color="white" />
