@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
-import { Trash2, Edit } from 'lucide-react'
+import { Trash2, Edit, Loader } from 'lucide-react'
 
 export function TablePatients(props: any) {
 
@@ -43,7 +43,7 @@ export function TablePatients(props: any) {
             {props.data.map((item: any, i: any) => (
               <tr className="bg-[#414141] text-white text-sm font-semibold border-b-2" key={item.id}>
                 <td className="px-6 py-2">
-                  <span className="font-bold">{i+1}</span>
+                  <span className="font-bold">{i + 1}</span>
                 </td>
                 <td className="px-6 py-2">
                   <span>
@@ -55,7 +55,7 @@ export function TablePatients(props: any) {
                 </td>
                 <td className="px-6 py-2">
                   <span>
-                   {item.patient_age} anos
+                    {item.patient_age} anos
                   </span>
                 </td>
                 <td className="px-6 py-2">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Fingerprint, File, Users, ArrowLeft, User, MapPin } from 'lucide-react'
+import { Loader, File, Users, ArrowLeft, User, MapPin } from 'lucide-react'
 import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { api } from "@/lib/sys/api/api";
@@ -50,8 +50,9 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
       className="bg-[#333232] text-white fixed top-0 right-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
     >
       {loading ? (
-        <div className="w-full flex justify-center items-center">
-          <span className="text-white text-center">Analizando exame ...</span>
+        <div className="w-full h-screen flex flex-col justify-center items-center">
+          <Loader className="animate-spin" size={40} color="white"/>
+          <span className="text-white text-sm text-center">Analisando exame</span>
         </div>
       ) : (
         <>
@@ -69,6 +70,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
                   type="radio"
                   value=""
                   name="disabled-radio"
+                  disabled={classify?.classe == 0 ? false : true}
                   className="w-4 h-4 text-green-600 bg-gray-100 border-gray-30"
                 />
                 <label htmlFor="disabled-radio-1" className="ms-2 text-sm font-medium text-white">AVC hemorrágico</label>
@@ -80,6 +82,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
                   type="radio"
                   value=""
                   name="disabled-radio"
+                  disabled={classify?.classe == 1 ? false : true}
                   className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300"
                 />
                 <label htmlFor="disabled-radio-2" className="ms-2 text-sm font-medium text-white">AVC isquêmico</label>
