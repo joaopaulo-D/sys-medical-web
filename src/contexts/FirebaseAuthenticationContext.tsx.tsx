@@ -83,7 +83,7 @@ export function FirebaseAuthenticationContextProvider({ children }: FirebaseAuth
           discipline: discipline,
           institution: institution,
           created_at: serverTimestamp(),
-          role: role = "student"
+          // role: role = "student"
         }).then(() => {
           setLoading(false)
         })
