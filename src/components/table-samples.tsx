@@ -36,36 +36,36 @@ export function TableSamples(props: IProps) {
           </thead>
           <tbody>
             {props.data.map((item: any, i: any) => (
-            <tr className="bg-[#414141] text-white text-sm font-semibold border-b-2" key={item.id}>
-              <td className="px-6 py-2">
-                <span>{i+1}</span>
-              </td>
-              <td className="px-6 py-2">
-                <span>
-                  {item.patient_first_name}
-                </span>
-              </td>
-              <td className="px-6 py-2">
-                <span>
-                  {item.patient_modality}
-                </span>
-              </td>
-              <td className="px-6 py-2">
-                <span>
-                  {item.patient_body}
-                </span>
-              </td>
-              <td className="py-2">
-                <Link href={`/dashboard/sys/patient/view/${item.id}`} className="flex items-center space-x-1 hover:text-gray-300">
-                  <View
-                    size={20}
-                    color="orange"
-                    className="cursor-pointer"
-                  />
-                  <span>ACESSAR VIEW</span>
-                </Link>
-              </td>
-            </tr>
+              <tr className="bg-[#414141] text-white text-sm font-semibold border-b-2" key={item.id}>
+                <td className="px-6 py-2">
+                  <span>{i + 1}</span>
+                </td>
+                <td className="px-6 py-2">
+                  <span>
+                    {item.patient_first_name}
+                  </span>
+                </td>
+                <td className="px-6 py-2">
+                  <span className="text-orange-500 font-bold">
+                    {item.patient_modality}
+                  </span>
+                </td>
+                <td className="px-6 py-2">
+                  <span>
+                    {item.patient_body}
+                  </span>
+                </td>
+                <td className="py-2">
+                  <Link href={`/dashboard/sys/patient/view/${item.id}`} className="flex items-center space-x-1 hover:text-gray-300">
+                    <View
+                      size={20}
+                      color="orange"
+                      className="cursor-pointer"
+                    />
+                    <span>ACESSAR VIEW</span>
+                  </Link>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

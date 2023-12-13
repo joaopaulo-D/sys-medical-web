@@ -12,13 +12,9 @@ import { ref, get, onValue } from 'firebase/database';
 
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx"
 
-import { api } from "@/lib/sys/api/api"
-
 export default function Map() {
 
   const [patient, setPatient] = useState<any>();
-  const [classify, setClassify] = useState<any>()
-  const [loading, setLoading] = useState<boolean>(false);
 
   const params = useParams()
 
