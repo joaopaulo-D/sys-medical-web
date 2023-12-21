@@ -13,7 +13,7 @@ export function TablePatients(props: any) {
   return (
     <>
       <div className="w-full relative overflow-x-auto shadow-md">
-        <table className="w-full bg-[#ecf3fe] text-xs text-left">
+        <table className="w-full bg-white text-xs text-left">
           <thead className="text-black uppercase text-xs">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -68,14 +68,14 @@ export function TablePatients(props: any) {
                   <Link href={`#`} className="flex items-center space-x-1 hover:text-gray-300">
                     <Trash2
                       size={18}
-                      color="red"
+                      color="white"
                       className="cursor-pointer"
                     />
                   </Link>
                   <Link href={`#`} className="flex items-center space-x-1 hover:text-gray-300">
                     <Edit
                       size={18}
-                      color="orange"
+                      color="white"
                       className="cursor-pointer"
                     />
                   </Link>

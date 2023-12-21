@@ -14,7 +14,7 @@ export function TableSamples(props: IProps) {
   return (
     <>
       <div className="w-full relative overflow-x-auto shadow-md">
-        <table className="w-full bg-[#ecf3fe] text-sm text-left">
+        <table className="w-full bg-white text-sm text-left">
           <thead className="text-black uppercase text-xs">
             <tr>
               <th scope="col" className="px-6 py-3">
@@ -59,7 +59,7 @@ export function TableSamples(props: IProps) {
                   <Link href={`/dashboard/sys/patient/view/${item.id}`} className="flex items-center space-x-1 hover:text-gray-300">
                     <View
                       size={20}
-                      color="orange"
+                      color="white"
                       className="cursor-pointer"
                     />
                     <span>ACESSAR VIEW</span>

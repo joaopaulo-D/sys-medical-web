@@ -16,7 +16,7 @@ export function Sidebar() {
       className="bg-[#333232] fixed top-0 left-0 z-40 w-20 h-screen transition-transform -translate-x-full sm:translate-x-0"
     >
       <div className="flex p-4 justify-center items-center">
-        <Brain size={30} color="orange" />
+        <Brain size={30} color="white" />
       </div>
       <ul className="space-y-3">
         <li>

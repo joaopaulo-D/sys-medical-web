@@ -227,7 +227,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
                           />
                           {typeMedicine.map((tag, index) => (
                             <div className="bg-white inline-flex items-center text-sm text-black rounded mt-1 mr-1 overflow-hidden" key={index}>
-                              <span className="ml-2 leading-relaxed truncate max-w-xs px-1" x-text="tag">{tag}</span>
+                              <span className="ml-2 leading-relaxed truncate max-w-xs px-1" x-text="tag">{index} - {tag}</span>
                               <X color="black" size={15} onClick={() => removeTag(index)}/>
                             </div>
                           ))}
@@ -295,10 +295,10 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
                   </div>
                 </form>
                 <div className="flex space-x-2 items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <Button className="rounded-sm text-red-500" variant="link" onClick={() => setOpen(!open)}>
+                  <Button className="rounded-sm text-red-500" variant="secondary" onClick={() => setOpen(!open)}>
                     CANCELAR
                   </Button>
-                  <Button onClick={handleCreatePatient} className="rounded-sm bg-green-500 text-white" disabled={loading}>
+                  <Button onClick={handleCreatePatient} className="rounded-sm bg-white text-black" disabled={loading}>
                     {loading ? "Carregando ..." : "CADASTRAR"}
                   </Button>
                 </div>

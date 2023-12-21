@@ -11,10 +11,16 @@ import { database } from "@/lib/firebase/config/firebase";
 import { ref, get, onValue } from 'firebase/database';
 
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx"
+import { Contrast, Move, RefreshCcw, RotateCcw, User, ZoomIn } from "lucide-react"
+
+interface SegmentationResponse {
+  image: string;
+}
 
 export default function Map() {
 
   const [patient, setPatient] = useState<any>();
+  const [segmentedImage, setSegmentedImage] = useState<string | null>(null);
 
   const params = useParams()
 
@@ -47,6 +53,27 @@ export default function Map() {
     }
   }
 
+  const handleSegmentation = async (image: string) => {
+    try {
+      const response = await fetch('https://saude.syslae.com.br/sys/ai/segmentation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({ image }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao processar a solicitação');
+      }
+
+      const blob = await response.blob();
+      setSegmentedImage(URL.createObjectURL(blob));
+    } catch (error) {
+      console.error('Erro ao segmentar a imagem:', error);
+    }
+  };
+
   useEffect(() => {
     getPatientByIdFirebase()
   }, [])
@@ -63,54 +90,91 @@ export default function Map() {
           key={patient[0]?.id}
         />
       ) : null}
-      <div className="sm:ml-64 flex sm:mr-64 h-screen bg-black">
+      <div className="sm:ml-64 sm:mr-64 h-screen bg-black">
         {patient?.map((item: any) => (
           <>
-            <div key={item.id} className="w-full border-2">
-              <div className="flex justify-between text-orange-400 text-sm">
-                <div className="flex flex-col">
-                  <span>{item.patient_first_name}</span>
-                  <span>{item.created_at}</span>
-                  <span>{item.patient_gender}</span>
-                </div>
-                <div className="flex flex-col">
-                  <span>{item.patient_modality}</span>
-                  <span>{item.created_at}</span>
-                  <span>{item.patient_body}</span>
-                </div>
-              </div>
-              <div>
-                <img src={`${item.sample_url}`} />
-              </div>
-              <div className="w-full text-orange-500">
-                <span>{new Date().toLocaleString()}</span>
-              </div>
+            <div className="flex px-2 py-4 text-sm space-x-8 border-b-2">
+              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
+                <RotateCcw size={20} color="white" />
+                <span>Girar</span>
+              </button>
+              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
+                <Move size={20} color="white" />
+                <span>Mover</span>
+              </button>
+              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500" onClick={() => handleSegmentation(item.sample_url)}>
+                <Contrast size={20} color="white" />
+                <span>Contraste</span>
+              </button>
+              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
+                <ZoomIn size={20} color="white" />
+                <span>Lupa</span>
+              </button>
+              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
+                <RefreshCcw size={20} color="white" />
+                <span>Resetar</span>
+              </button>
             </div>
-            <div className="w-full border-2">
-              <div className="flex justify-between text-orange-400 text-sm">
-                <div className="flex flex-col">
-                  <span>{item.patient_first_name} - Contraste</span>
-                  <span>{item.created_at}</span>
-                  <span>{item.patient_gender}</span>
+            <div className="grid grid-cols-2">
+              <div key={item.id} className="w-full">
+                <div className="flex justify-between text-blue-200 text-sm">
+                  <div className="flex flex-col">
+                    <span>{item.patient_first_name}</span>
+                    <span>{item.created_at}</span>
+                    <span>{item.patient_gender}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span>{item.patient_modality}</span>
+                    <span>{item.created_at}</span>
+                    <span>{item.patient_body}</span>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <span>{item.patient_modality}</span>
-                  <span>{item.created_at}</span>
-                  <span>{item.patient_body}</span>
+                <div>
+                  <img src={`${item.sample_url}`} />
+                </div>
+                <div className="w-full text-blue-200">
+                  <span>{new Date().toLocaleString()}</span>
                 </div>
               </div>
-              <div>
-                <img src={`${item.sample_url}`} />
-              </div>
-              <div className="w-full text-orange-500 text-sm">
-                <span>{new Date().toLocaleString()}</span>
+              <div className="w-full">
+                <div className="flex justify-between text-blue-200 text-sm">
+                  <div className="flex flex-col">
+                    <span>{item.patient_first_name} - Contraste</span>
+                    <span>{item.created_at}</span>
+                    <span>{item.patient_gender}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span>{item.patient_modality}</span>
+                    <span>{item.created_at}</span>
+                    <span>{item.patient_body}</span>
+                  </div>
+                </div>
+                <div>
+                  {segmentedImage && (
+                    <>
+                      <div className="flex justify-center items-center">
+                        <img src={segmentedImage} alt="segmented" />
+                      </div>
+                      <div className="grid grid-cols-4 ">
+                        <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
+                        <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
+                        <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
+                        <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
+                        <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
+                      </div>
+                      <div className="w-full text-blue-200 text-sm">
+                        <span>{new Date().toLocaleString()}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </>
         ))}
       </div>
       {patient?.length > 0 ? (
-        <SideBarRight image={patient[0].sample_url} medicine={patient[0].patient_medicine} typeMedicine={patient[0].patient_typeMedicine}/>
+        <SideBarRight image={patient[0].sample_url} medicine={patient[0].patient_medicine} typeMedicine={patient[0].patient_typeMedicine} />
       ) : null}
     </div>
   )

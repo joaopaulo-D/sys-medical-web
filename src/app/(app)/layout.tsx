@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <div className='bg-[#222529] h-screen flex flex-col'>
+    <div className='bg-[#222325] h-screen flex flex-col'>
       {children}
     </div>
   )

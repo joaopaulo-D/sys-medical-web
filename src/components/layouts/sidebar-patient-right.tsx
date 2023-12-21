@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Separator } from "../ui/separator";
 import { api } from "@/lib/sys/api/api";
 import { twMerge } from "tailwind-merge";
+import { Legend } from "../ui/legend";
+import { cn } from "@/lib/utils";
 
 interface IProps {
   image: string;
@@ -25,7 +27,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
       const formData = new FormData()
       formData.append('image', image)
 
-      const response = await api.post("/sys/ai/classification", formData, {
+      const response = await api.post("/sys/ai/classify", formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -34,6 +36,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
       if (response.data) {
         setClassify(response?.data.classifcation)
       }
+
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -47,11 +50,11 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
 
   return (
     <aside
-      className="bg-[#333232] text-white fixed top-0 right-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+      className="bg-black border-l-2 text-white fixed top-0 right-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
     >
       {loading ? (
         <div className="w-full h-screen flex flex-col justify-center items-center">
-          <Loader className="animate-spin" size={40} color="white"/>
+          <Loader className="animate-spin" size={40} color="white" />
           <span className="text-white text-sm text-center">Analisando exame</span>
         </div>
       ) : (
@@ -62,30 +65,50 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
                 Patologias - Analisadas
               </h1>
             </div >
-            <div className="p-4">
-              <div className="flex items-center mb-4">
-                <input
-                  id="disabled-radio-1"
-                  checked={classify?.classe == 0 ? true : false}
-                  type="radio"
-                  value=""
-                  name="disabled-radio"
-                  disabled={classify?.classe == 0 ? false : true}
-                  className="w-4 h-4 text-green-600 bg-gray-100 border-gray-30"
-                />
-                <label htmlFor="disabled-radio-1" className="ms-2 text-sm font-medium text-white">AVC hemorrágico</label>
+            <div className="p-4 space-y-2">
+              <div>
+                <div className="flex items-center">
+                  <input
+                    id="disabled-radio-1"
+                    checked={classify?.classe == 0 ? true : false}
+                    type="radio"
+                    value=""
+                    name="disabled-radio"
+                    disabled={classify?.classe == 0 ? false : true}
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-30 accent-red-500"
+                  />
+                  <label htmlFor="disabled-radio-1" className="ms-2 text-sm font-medium text-white">AVC hemorrágico</label>
+                </div>
+                <div className="flex items-center space-x-2 font-semibold text-sm">
+                  <div className="w-10/12 bg-gray-200 rounded-full">
+                    <div className={cn(
+                      "bg-red-600 h-2.5 rounded-full"
+                    )} style={{ width: `${classify?.classe == 0 ? classify?.score : 0}%` }} />
+                  </div>
+                  <span>{classify?.classe == 0 ? classify?.score : 0}%</span>
+                </div>
               </div>
-              <div className="flex items-center">
-                <input
-                  id="disabled-radio-2"
-                  checked={classify?.classe == 1 ? true : false}
-                  type="radio"
-                  value=""
-                  name="disabled-radio"
-                  disabled={classify?.classe == 1 ? false : true}
-                  className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300"
-                />
-                <label htmlFor="disabled-radio-2" className="ms-2 text-sm font-medium text-white">AVC isquêmico</label>
+              <div>
+                <div className="flex items-center">
+                  <input
+                    id="disabled-radio-2"
+                    checked={classify?.classe == 1 ? true : false}
+                    type="radio"
+                    value=""
+                    name="disabled-radio"
+                    disabled={classify?.classe == 1 ? false : true}
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 accent-red-500"
+                  />
+                  <label htmlFor="disabled-radio-2" className="ms-2 text-sm font-medium text-white">AVC isquêmico</label>
+                </div>
+                <div className="flex items-center space-x-2 font-semibold text-sm">
+                  <div className="w-10/12 bg-gray-200 rounded-full">
+                    <div className={cn(
+                      "bg-red-600 h-2.5 rounded-full"
+                    )} style={{ width: `${classify?.classe == 1 ? classify?.score : 0}%` }} />
+                  </div>
+                  <span>{classify?.classe == 1 ? classify?.score : 0}%</span>
+                </div>
               </div>
             </div>
           </div >
@@ -103,14 +126,9 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
             <h1 className="uppercase text-sm font-bold">Medicamentos</h1>
             <div className="w-full">
 
-              {typeMedicine?.map((tags: any, i: any) => (
+              {typeMedicine?.map((tag: any, i: any) => (
                 <div className="w-full">
-                  <span className={twMerge(
-                    "text-black text-sm font-medium me-1 px-2.5 py-0.5 rounded",
-                    "bg-white"
-                  )}>
-                    {tags}
-                  </span>
+                  <Legend text={tag} />
                 </div>
               ))}
               {!typeMedicine ? (
