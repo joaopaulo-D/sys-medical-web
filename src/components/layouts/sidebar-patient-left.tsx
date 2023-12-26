@@ -2,7 +2,6 @@ import React from "react";
 
 import { Fingerprint, File, Users, ArrowLeft, User, MapPin } from 'lucide-react'
 import Link from "next/link";
-import { Separator } from "../ui/separator";
 
 interface IProps {
   id: string;
@@ -15,7 +14,7 @@ interface IProps {
 export default function SideBarLeft({ gender, id, modality, patient, body }:IProps) {
   return (
     <aside
-      className="bg-black border-r-2 text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+      className="bg-[#222325] border-r-2 text-white fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
     >
       <Link href={"/dashboard/sys/sample"} className="flex p-4 justify-between items-center">
         <h1 className="text-xl font-bold">

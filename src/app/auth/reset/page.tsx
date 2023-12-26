@@ -61,12 +61,12 @@ export default function Reset() {
                 </div>
               ) : null}
               <Link href="/auth/signin" className="flex space-x-1">
-                <ChevronsLeft size={15} color="blue" />
-                <span className="text-blue-500 text-xs">Voltar</span>
+                <ChevronsLeft size={15} color="green" />
+                <span className="text-green-500 text-xs">Voltar</span>
               </Link>
             </div>
 
-            <Button type="submit" className="bg-blue-500 text-white hover:bg-blue-400" variant="default">
+            <Button type="submit" className="bg-green-500 text-white hover:bg-green-400" variant="default">
               {contextAuth?.loading ? "Carregando ..." : "Enviar"}
             </Button>
 

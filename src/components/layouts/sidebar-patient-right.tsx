@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Loader, File, Users, ArrowLeft, User, MapPin } from 'lucide-react'
 import Link from "next/link";
 import { Separator } from "../ui/separator";
-import { api } from "@/lib/sys/api/api";
+import { api } from "@/lib/sys/server/api";
 import { twMerge } from "tailwind-merge";
 import { Legend } from "../ui/legend";
 import { cn } from "@/lib/utils";
@@ -34,7 +34,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
       })
 
       if (response.data) {
-        setClassify(response?.data.classifcation)
+        setClassify(response?.data.classify)
       }
 
       setLoading(false)
@@ -50,7 +50,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
 
   return (
     <aside
-      className="bg-black border-l-2 text-white fixed top-0 right-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+      className="bg-[#222325] border-l-2 text-white fixed top-0 right-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
     >
       {loading ? (
         <div className="w-full h-screen flex flex-col justify-center items-center">
@@ -82,7 +82,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
                 <div className="flex items-center space-x-2 font-semibold text-sm">
                   <div className="w-10/12 bg-gray-200 rounded-full">
                     <div className={cn(
-                      "bg-red-600 h-2.5 rounded-full"
+                      "bg-red-500 h-2.5 rounded-full"
                     )} style={{ width: `${classify?.classe == 0 ? classify?.score : 0}%` }} />
                   </div>
                   <span>{classify?.classe == 0 ? classify?.score : 0}%</span>
@@ -104,7 +104,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
                 <div className="flex items-center space-x-2 font-semibold text-sm">
                   <div className="w-10/12 bg-gray-200 rounded-full">
                     <div className={cn(
-                      "bg-red-600 h-2.5 rounded-full"
+                      "bg-red-500 h-2.5 rounded-full"
                     )} style={{ width: `${classify?.classe == 1 ? classify?.score : 0}%` }} />
                   </div>
                   <span>{classify?.classe == 1 ? classify?.score : 0}%</span>

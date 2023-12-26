@@ -4,15 +4,15 @@ import { useEffect, useState } from "react"
 
 import { useParams } from "next/navigation"
 
+import { Axis3D, Contrast, Move, RefreshCcw, RotateCcw, ZoomIn } from "lucide-react"
+
 import SideBarLeft from "@/components/layouts/sidebar-patient-left"
 import SideBarRight from "@/components/layouts/sidebar-patient-right"
-
-import { database } from "@/lib/firebase/config/firebase";
-import { ref, get, onValue } from 'firebase/database';
+import ButtonView from "@/components/layouts/button-view"
 
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx"
-import { Contrast, Move, RefreshCcw, RotateCcw, User, ZoomIn } from "lucide-react"
-
+import { database } from "@/lib/firebase/config/firebase";
+import { ref, onValue } from 'firebase/database';
 interface SegmentationResponse {
   image: string;
 }
@@ -55,7 +55,7 @@ export default function Map() {
 
   const handleSegmentation = async (image: string) => {
     try {
-      const response = await fetch('https://saude.syslae.com.br/sys/ai/segmentation', {
+      const response = await fetch('https://api.saude.syslae.com.br/sys/ai/segmentation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -90,34 +90,44 @@ export default function Map() {
           key={patient[0]?.id}
         />
       ) : null}
-      <div className="sm:ml-64 sm:mr-64 h-screen bg-black">
+      <div className="sm:ml-64 sm:mr-64 h-full bg-black">
         {patient?.map((item: any) => (
           <>
-            <div className="flex px-2 py-4 text-sm space-x-8 border-b-2">
-              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
-                <RotateCcw size={20} color="white" />
-                <span>Girar</span>
-              </button>
-              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
-                <Move size={20} color="white" />
-                <span>Mover</span>
-              </button>
-              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500" onClick={() => handleSegmentation(item.sample_url)}>
-                <Contrast size={20} color="white" />
-                <span>Contraste</span>
-              </button>
-              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
-                <ZoomIn size={20} color="white" />
-                <span>Lupa</span>
-              </button>
-              <button className="flex flex-col justify-center items-center space-x-1 hover:text-blue-500">
-                <RefreshCcw size={20} color="white" />
-                <span>Resetar</span>
-              </button>
+            <div className="flex px-2 py-3 text-sm space-x-8 border-b-[1px] border-b-white">
+              <ButtonView
+                title="Girar"
+                icon={RotateCcw}
+                onSubmitAction={() => console.log("")}
+              />
+              <ButtonView
+                title="Mover"
+                icon={Move}
+                onSubmitAction={() => console.log("")}
+              />
+              <ButtonView
+                title="Localizar"
+                icon={Contrast}
+                onSubmitAction={() => handleSegmentation(item.sample_url)}
+              />
+              <ButtonView
+                title="Lupa"
+                icon={ZoomIn}
+                onSubmitAction={() => console.log("")}
+              />
+              <ButtonView
+                title="Resetar"
+                icon={RefreshCcw}
+                onSubmitAction={() => console.log("")}
+              />
+              <ButtonView
+                title="View 3D"
+                icon={Axis3D}
+                onSubmitAction={() => console.log("")}
+              />
             </div>
             <div className="grid grid-cols-2">
-              <div key={item.id} className="w-full">
-                <div className="flex justify-between text-blue-200 text-sm">
+              <div key={item.id} className="w-full p-2 border-r-[1px] border-r-white">
+                <div className="flex justify-between text-yellow-500 text-sm">
                   <div className="flex flex-col">
                     <span>{item.patient_first_name}</span>
                     <span>{item.created_at}</span>
@@ -132,14 +142,21 @@ export default function Map() {
                 <div>
                   <img src={`${item.sample_url}`} />
                 </div>
-                <div className="w-full text-blue-200">
-                  <span>{new Date().toLocaleString()}</span>
+                <div className="flex justify-between text-yellow-500 text-sm">
+                  <div className="flex flex-col">
+                    <span>Z: 0</span>
+                    <span>W: 256 L: 128</span>
+                    <span>{new Date().toLocaleString()}</span>
+                  </div>
+                  <div className="">
+                    <span>1/2</span>
+                  </div>
                 </div>
               </div>
-              <div className="w-full">
-                <div className="flex justify-between text-blue-200 text-sm">
+              <div className="w-full p-2">
+                <div className="flex justify-between text-yellow-500 text-sm">
                   <div className="flex flex-col">
-                    <span>{item.patient_first_name} - Contraste</span>
+                    <span>{item.patient_first_name} - Lacalização</span>
                     <span>{item.created_at}</span>
                     <span>{item.patient_gender}</span>
                   </div>
@@ -161,9 +178,17 @@ export default function Map() {
                         <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
                         <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
                         <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
+                        <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
                       </div>
-                      <div className="w-full text-blue-200 text-sm">
-                        <span>{new Date().toLocaleString()}</span>
+                      <div className="flex justify-between text-yellow-500 text-sm">
+                        <div className="flex flex-col">
+                          <span>Z: 0</span>
+                          <span>W: 256 L: 128</span>
+                          <span>{new Date().toLocaleString()}</span>
+                        </div>
+                        <div className="">
+                          <span>2/2</span>
+                        </div>
                       </div>
                     </>
                   )}

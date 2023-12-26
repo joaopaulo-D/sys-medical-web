@@ -1,4 +1,4 @@
-export function sizeUpload(bytes: number): string {
+export function size(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
 
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];

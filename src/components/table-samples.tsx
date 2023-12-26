@@ -3,7 +3,18 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+
 import { MapPin, View } from 'lucide-react'
+import { Badge } from "./ui/badge";
 
 interface IProps {
   data: any
@@ -14,48 +25,38 @@ export function TableSamples(props: IProps) {
   return (
     <>
       <div className="w-full relative overflow-x-auto shadow-md">
-        <table className="w-full bg-white text-sm text-left">
-          <thead className="text-black uppercase text-xs">
-            <tr>
-              <th scope="col" className="px-6 py-3">
-                id
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Paciente
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Modalidade
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Parte do Corpo
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Ações
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>ID</TableHead>
+              <TableHead>PACIENTE</TableHead>
+              <TableHead>MODALIDADE</TableHead>
+              <TableHead>PARTE DO CORPO</TableHead>
+              <TableHead>AÇÕES</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {props.data.map((item: any, i: any) => (
-              <tr className="bg-[#414141] text-white text-sm font-semibold border-b-2" key={item.id}>
-                <td className="px-6 py-2">
-                  <span>{i + 1}</span>
-                </td>
-                <td className="px-6 py-2">
-                  <span>
-                    {item.patient_first_name}
-                  </span>
-                </td>
-                <td className="px-6 py-2">
-                  <span className="text-orange-500 font-bold">
+              <TableRow key={i}>
+                <TableCell className="text-xs text-muted-foreground">
+                  {i + 1}
+                </TableCell>
+                <TableCell>
+                  {item.patient_first_name}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    size="sm"
+                    variant="secondary"
+                    className="bg-emerald-400/20"
+                  >
                     {item.patient_modality}
-                  </span>
-                </td>
-                <td className="px-6 py-2">
-                  <span>
-                    {item.patient_body}
-                  </span>
-                </td>
-                <td className="py-2">
+                  </Badge>
+                </TableCell>
+                <TableCell className="space-x-2 font-medium">
+                  <span>{item.patient_body}</span>
+                </TableCell>
+                <TableCell className="space-x-2 font-medium flex">
                   <Link href={`/dashboard/sys/patient/view/${item.id}`} className="flex items-center space-x-1 hover:text-gray-300">
                     <View
                       size={20}
@@ -64,11 +65,11 @@ export function TableSamples(props: IProps) {
                     />
                     <span>ACESSAR VIEW</span>
                   </Link>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </>
   )

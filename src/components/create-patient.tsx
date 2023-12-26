@@ -6,11 +6,21 @@ import { ref as refDataset, serverTimestamp, set, push, child } from 'firebase/d
 
 import { X } from "lucide-react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog'
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
+import { Label } from "./ui/label";
 
 type CreateProps = {
   setOpen: any;
@@ -34,7 +44,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
   const [gender, setGender] = useState<string>('')
   const [body, setBody] = useState<string>('')
   const [modality, setModality] = useState<string>('')
-  const [medicine, setMedicine] = useState<string>('')
+  const [medicine, setMedicine] = useState<string>('nao')
   const [typeMedicine, setTypeMedicine] = useState<string[]>([])
 
   const [file, setFile] = useState<any | null>(null)
@@ -106,208 +116,171 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
   }
 
   return (
-    <>
-      {open ? (
-        <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-          >
-            <div className="relative w-4/5 my-4">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-[#222529] outline-none focus:outline-none">
-                <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Cadastrar Paciente
-                  </h3>
-                  <button
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setOpen(!open)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
-                </div>
-                <form className="w-full p-4">
-                  <div className="flex flex-wrap -mx-3 mb-6">
-                    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
-                        Primeiro Nome *
-                      </label>
-                      <Input
-                        className="bg-[#333232]"
-                        placeholder=""
-                        type="text"
-                        id="first_name"
-                        onChange={(value) => setFirstName(value.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="w-full md:w-1/2 px-3">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                        Segundo Nome *
-                      </label>
-                      <Input
-                        className="bg-[#333232]"
-                        placeholder=""
-                        type="text"
-                        id="last_name"
-                        onChange={(value) => setLastName(value.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap -mx-3 mb-6">
-                    <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
-                        Idade *
-                      </label>
-                      <Input
-                        className="bg-[#333232]"
-                        placeholder=""
-                        type="number"
-                        id="age"
-                        onChange={(value) => setAge(value.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="w-full md:w-1/2 px-3">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                        Sexo *
-                      </label>
-                      <div>
-                        <Select onValueChange={(value) => setGender(value)} required>
-                          <SelectTrigger className="bg-[#333232]">
-                            <SelectValue placeholder="" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Masculino">
-                              Masculino
-                            </SelectItem>
-                            <SelectItem value="Feminino">
-                              Feminino
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap -mx-3 mb-6">
-                    <div className="w-full md:w-1/2 px-3">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                        faz uso de medicamento ? *
-                      </label>
-                      <div>
-                        <Select onValueChange={(value) => setMedicine(value)} required>
-                          <SelectTrigger className="bg-[#333232]">
-                            <SelectValue placeholder="" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="sim">
-                              Sim
-                            </SelectItem>
-                            <SelectItem value="nao">
-                              Não
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    {medicine == "sim" ? (
-                      <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
-                          Qual Medicamento ? *
-                        </label>
-                        <div>
-                          <Input
-                            className="bg-[#333232]"
-                            placeholder=""
-                            type="text"
-                            onKeyDown={handleKeyDown}
-                            required
-                          />
-                          {typeMedicine.map((tag, index) => (
-                            <div className="bg-white inline-flex items-center text-sm text-black rounded mt-1 mr-1 overflow-hidden" key={index}>
-                              <span className="ml-2 leading-relaxed truncate max-w-xs px-1" x-text="tag">{index} - {tag}</span>
-                              <X color="black" size={15} onClick={() => removeTag(index)}/>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className="flex flex-wrap -mx-3 mb-6">
-                    <div className="w-full md:w-1/2 px-3">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                        Modalidade *
-                      </label>
-                      <div>
-                        <Select onValueChange={(value) => setModality(value)} required>
-                          <SelectTrigger className="bg-[#333232]">
-                            <SelectValue placeholder="" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="CT">
-                              Tomografia computadorizada - CT
-                            </SelectItem>
-                            <SelectItem value="outros" disabled>
-                              Outros
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="w-full md:w-1/2 px-3">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                        Parte do Corpo *
-                      </label>
-                      <div>
-                        <Select onValueChange={(value) => setBody(value)} required>
-                          <SelectTrigger className="bg-[#333232]">
-                            <SelectValue placeholder="" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="brain">
-                              TC Craniana
-                            </SelectItem>
-                            <SelectItem value="outros" disabled>
-                              Outros
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
+    <DialogContent className="bg-[#222325]">
+      <DialogHeader>
+        <DialogTitle>Cadastrar Paciente</DialogTitle>
+        <DialogDescription>
 
-                  </div>
-                  <div className="flex flex-wrap -mx-3 mb-6">
-                    <div className="w-full md:w-1/2 px-3">
-                      <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                        Exame (ex: png, jpg e dicom) *
-                      </label>
-                      <Input
-                        className="bg-[#333232]"
-                        placeholder=""
-                        type="file"
-                        accept='.png, .jpg, .dicom'
-                        onChange={handleImageChange}
-                        required
-                      />
-                    </div>
-                  </div>
-                </form>
-                <div className="flex space-x-2 items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
-                  <Button className="rounded-sm text-red-500" variant="secondary" onClick={() => setOpen(!open)}>
-                    CANCELAR
-                  </Button>
-                  <Button onClick={handleCreatePatient} className="rounded-sm bg-white text-black" disabled={loading}>
-                    {loading ? "Carregando ..." : "CADASTRAR"}
-                  </Button>
-                </div>
-              </div>
+        </DialogDescription>
+      </DialogHeader>
+      <form onSubmit={handleCreatePatient} className="w-full">
+        <div className="flex space-x-2 mb-6">
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Primeiro Nome *</Label>
+            <Input
+              className="bg-[#333232]"
+              placeholder=""
+              type="text"
+              id="first_name"
+              onChange={(value) => setFirstName(value.target.value)}
+              required
+            />
+          </div>
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Segundo Nome *</Label>
+            <Input
+              className="bg-[#333232]"
+              placeholder=""
+              type="text"
+              id="last_name"
+              onChange={(value) => setLastName(value.target.value)}
+              required
+            />
+          </div>
+        </div>
+        <div className="flex space-x-2 mb-6">
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Idade *</Label>
+            <Input
+              className="bg-[#333232]"
+              placeholder=""
+              type="number"
+              id="age"
+              onChange={(value) => setAge(value.target.value)}
+              required
+            />
+          </div>
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Sexo *</Label>
+            <div>
+              <Select onValueChange={(value) => setGender(value)} required>
+                <SelectTrigger className="bg-[#333232]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Masculino">
+                    Masculino
+                  </SelectItem>
+                  <SelectItem value="Feminino">
+                    Feminino
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
-          <div className="opacity-60 fixed inset-0 z-40 bg-black"></div>
-        </>
-      ) : null}
-    </>
+        </div>
+        <div className="flex space-x-2 mb-6">
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">faz uso de medicamento ? *</Label>
+            <div>
+              <Select onValueChange={(value) => setMedicine(value)} required>
+                <SelectTrigger className="bg-[#333232]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="sim">
+                    Sim
+                  </SelectItem>
+                  <SelectItem value="nao">
+                    Não
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          {medicine != "nao" ? (
+            <div className="w-full md:w-1/2">
+              <Label htmlFor="name">Qual medicamento ? *</Label>
+              <div>
+                <Input
+                  className="bg-[#333232]"
+                  placeholder=""
+                  type="text"
+                  onKeyDown={handleKeyDown}
+                  required
+                />
+                {typeMedicine.map((tag, index) => (
+                  <div className="bg-white inline-flex items-center text-sm text-black rounded mt-1 mr-1 overflow-hidden" key={index}>
+                    <span className="ml-2 leading-relaxed truncate max-w-xs px-1" x-text="tag">{index} - {tag}</span>
+                    <X color="black" size={15} onClick={() => removeTag(index)} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Modalidade *</Label>
+            <div>
+              <Select onValueChange={(value) => setModality(value)} required>
+                <SelectTrigger className="bg-[#333232]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="CT">
+                    Tomografia computadorizada - CT
+                  </SelectItem>
+                  <SelectItem value="outros" disabled>
+                    Outros
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+        <div className="flex space-x-2 mb-6">
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Parte do Corpo *</Label>
+            <div>
+              <Select onValueChange={(value) => setBody(value)} required>
+                <SelectTrigger className="bg-[#333232]">
+                  <SelectValue placeholder="" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="brain">
+                    TC Craniana
+                  </SelectItem>
+                  <SelectItem value="outros" disabled>
+                    Outros
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Exame (ex: png, jpg e dicom) *</Label>
+            <Input
+              className="bg-[#333232]"
+              placeholder=""
+              type="file"
+              accept='.png, .jpg, .dicom'
+              onChange={handleImageChange}
+              required
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setOpen(false)
+              setMedicine("nao")
+            }}
+          >
+            Cancelar
+          </Button>
+          <Button>Cadastrar</Button>
+        </DialogFooter>
+      </form>
+    </DialogContent>
   )
 }

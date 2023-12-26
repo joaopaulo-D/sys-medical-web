@@ -18,49 +18,48 @@ import {
   serverTimestamp
 } from "firebase/database";
 
-import { Error } from "@/lib/errorFirebase";
+import { Error } from "@/lib/firebase/error/error";
 import { useRouter } from "next/navigation";
 
-interface FirebaseAuthenticationContextProviderProps {
+interface IFirebaseAuthenticationContextProvider {
   children: ReactNode;
 }
 
-interface AuthenticationContextProps {
+interface IAuthenticationContext {
   user: User | null;
   isAuthenticated: boolean;
-  loginWithEmailPassword: (props: SignInProps) => void;
-  signUpWithEmailPassword: (props: SignUpProps) => Promise<void>;
-  resetPassword: (props: ResetProps) => void;
+  loginWithEmailPassword: (props: ISignIn) => void;
+  signUpWithEmailPassword: (props: ISignUp) => Promise<void>;
+  resetPassword: (props: IReset) => void;
   logout: () => void;
   loading: boolean;
 }
 
-interface SignInProps {
+interface ISignIn {
   email: string;
   password: string;
 }
 
-interface SignUpProps {
+interface ISignUp {
   institution: string;
   discipline: string;
   email: string;
   password: string;
-  role?: "adm" | "tearch" | "student";
 }
 
-interface ResetProps {
+interface IReset {
   email: string;
 }
 
-export const AuthenticationContext = createContext<AuthenticationContextProps | null>(null)
+export const AuthenticationContext = createContext<IAuthenticationContext | null>(null)
 
-export function FirebaseAuthenticationContextProvider({ children }: FirebaseAuthenticationContextProviderProps) {
+export function FirebaseAuthenticationContextProvider({ children }: IFirebaseAuthenticationContextProvider) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const isAuthenticated = !!user;
   const router = useRouter();
 
-  const loginWithEmailPassword = async ({ email, password }: SignInProps) => {
+  const loginWithEmailPassword = async ({ email, password }: ISignIn) => {
     try {
       setLoading(true)
       const { user: User } = await signInWithEmailAndPassword(auth, email, password)
@@ -72,7 +71,7 @@ export function FirebaseAuthenticationContextProvider({ children }: FirebaseAuth
     }
   }
 
-  const signUpWithEmailPassword = async ({ discipline, email, institution, password, role }: SignUpProps) => {
+  const signUpWithEmailPassword = async ({ discipline, email, institution, password }: ISignUp) => {
     try {
       setLoading(true)
       const { user: User } = await createUserWithEmailAndPassword(auth, email, password);
@@ -83,7 +82,6 @@ export function FirebaseAuthenticationContextProvider({ children }: FirebaseAuth
           discipline: discipline,
           institution: institution,
           created_at: serverTimestamp(),
-          // role: role = "student"
         }).then(() => {
           setLoading(false)
         })
@@ -96,7 +94,7 @@ export function FirebaseAuthenticationContextProvider({ children }: FirebaseAuth
     }
   }
 
-  const resetPassword = async ({ email }: ResetProps) => {
+  const resetPassword = async ({ email }: IReset) => {
     try {
       setLoading(true)
       await sendPasswordResetEmail(auth, email).then(() => alert("Link para redefinir sua senha foi enviado com sucesso!"))

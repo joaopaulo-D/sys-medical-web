@@ -1,6 +1,6 @@
 "use client"
 
-import { List, Settings, Brain, Folder, User, Info, LogOut } from "lucide-react";
+import { List, Settings, Brain, Folder, User, Info, LogOut, HelpCircle } from "lucide-react";
 
 import { NavLink } from "../ui/nav-link";
 import { Button } from "../ui/button";
@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
 
 export function Sidebar() {
-  
+
   const contextAuth = useAuthenticationContext()
 
   return (
@@ -19,6 +19,12 @@ export function Sidebar() {
         <Brain size={30} color="white" />
       </div>
       <ul className="space-y-3">
+        {/* <li>
+          <NavLink href="/dashboard/sys/monitoring">
+            <Folder size={25} color="white" />
+            <span>Monitoramento</span>
+          </NavLink>
+        </li> */}
         <li>
           <NavLink href="/dashboard/sys/patient">
             <List size={25} color="white" />
@@ -33,20 +39,21 @@ export function Sidebar() {
         </li>
         <li>
           <NavLink href="#">
-            <Info size={25} color="white" />
-            <span className="text-[10px]">Informações</span>
+            <HelpCircle size={25} color="white" />
+            <span>Ajuda</span>
           </NavLink>
         </li>
         <li>
           <NavLink href="#">
             <Settings size={25} color="white" />
-            <span className="text-[10px]">Configurações</span>
+            <span>Ajustes</span>
           </NavLink>
         </li>
       </ul>
       <div className="absolute bottom-3 left-2 space-y-3">
         <NavLink href="#">
           <User size={25} color="white" />
+          <span>Conta</span>
         </NavLink>
         <Button variant="link" onClick={() => contextAuth?.logout()}>
           <LogOut size={25} color="white" />
