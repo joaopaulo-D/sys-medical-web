@@ -6,22 +6,13 @@ import { Sidebar } from "@/components/layouts/sidebar";
 import { TablePatients } from "@/components/table-patients";
 import { Button } from "@/components/ui/button";
 import { CreatePatient } from "@/components/create-patient";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Dialog } from '@/components/ui/dialog'
 
 import { UserPlus } from "lucide-react";
 
 import { database } from "@/lib/firebase/config/firebase";
 import { ref, get, onValue } from 'firebase/database';
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
-import { Label } from "@/components/ui/label";
 
 export default function Patient() {
 
@@ -30,8 +21,8 @@ export default function Patient() {
 
   const contextAuth = useAuthenticationContext()
 
-  const getPatientsFirebase = async () => {
-    
+  const getPatientsFirebase = async (): Promise<void> => {
+
     const databaseRef = ref(database, `doctors/${contextAuth?.user?.uid}/patients`);
 
     try {
@@ -60,7 +51,7 @@ export default function Patient() {
   }, [])
 
   return (
-    <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+    <div>
       <Sidebar />
       <div className="py-3 sm:ml-[6rem] h-screen px-2 space-y-5">
         <div className="flex w-full justify-between">
@@ -70,9 +61,11 @@ export default function Patient() {
             <span>Adicionar Paciente</span>
           </Button>
         </div>
-        <TablePatients data={patients}/>
+        <TablePatients data={patients} />
       </div>
-      <CreatePatient open={openDialog} setOpen={setOpenDialog}/>
-    </Dialog>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <CreatePatient open={openDialog} setOpen={setOpenDialog} />
+      </Dialog>
+    </div>
   )
 } 

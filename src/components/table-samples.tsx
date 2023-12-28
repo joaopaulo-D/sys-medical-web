@@ -6,15 +6,15 @@ import Link from "next/link";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
 
-import { MapPin, View } from 'lucide-react'
+import { View } from 'lucide-react'
 import { Badge } from "./ui/badge";
+import { convertDate } from "@/lib/date";
 
 interface IProps {
   data: any
@@ -30,6 +30,7 @@ export function TableSamples(props: IProps) {
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>PACIENTE</TableHead>
+              <TableHead>DATA DE NASCIMENTO</TableHead>
               <TableHead>MODALIDADE</TableHead>
               <TableHead>PARTE DO CORPO</TableHead>
               <TableHead>AÇÕES</TableHead>
@@ -45,16 +46,25 @@ export function TableSamples(props: IProps) {
                   {item.patient_first_name}
                 </TableCell>
                 <TableCell>
+                  {convertDate(item.patient_date)}
+                </TableCell>
+                <TableCell>
                   <Badge
                     size="sm"
                     variant="secondary"
-                    className="bg-emerald-400/20"
+                    className="bg-orange-500/40"
                   >
                     {item.patient_modality}
                   </Badge>
                 </TableCell>
                 <TableCell className="space-x-2 font-medium">
-                  <span>{item.patient_body}</span>
+                  <Badge
+                    size="sm"
+                    variant="secondary"
+                    className="bg-yellow-500/40"
+                  >
+                    {item.patient_body == "brain" ? "TC do crânio" : item.patient_body}
+                  </Badge>
                 </TableCell>
                 <TableCell className="space-x-2 font-medium flex">
                   <Link href={`/dashboard/sys/patient/view/${item.id}`} className="flex items-center space-x-1 hover:text-gray-300">

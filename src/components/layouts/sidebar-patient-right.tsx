@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { Loader, File, Users, ArrowLeft, User, MapPin } from 'lucide-react'
-import Link from "next/link";
+import { Loader } from 'lucide-react'
+
 import { Separator } from "../ui/separator";
 import { api } from "@/lib/sys/server/api";
 import { twMerge } from "tailwind-merge";
@@ -14,9 +14,7 @@ interface IProps {
   typeMedicine: string[];
 }
 
-export default function SideBarRight({ image, medicine, typeMedicine }: IProps) {
-
-  console.log(typeMedicine)
+export default function SideBarRight({ image, typeMedicine }: IProps) {
 
   const [classify, setClassify] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false)
@@ -40,7 +38,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
       setLoading(false)
     } catch (error) {
       setLoading(false)
-      console.log(error)
+      console.log("Error ao classificar exame: ", error)
     }
   }
 
@@ -75,7 +73,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
                     value=""
                     name="disabled-radio"
                     disabled={classify?.classe == 0 ? false : true}
-                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-30 accent-red-500"
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-30 accent-blue-500"
                   />
                   <label htmlFor="disabled-radio-1" className="ms-2 text-sm font-medium text-white">AVC hemorrágico</label>
                 </div>
@@ -97,7 +95,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
                     value=""
                     name="disabled-radio"
                     disabled={classify?.classe == 1 ? false : true}
-                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 accent-red-500"
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 accent-blue-500"
                   />
                   <label htmlFor="disabled-radio-2" className="ms-2 text-sm font-medium text-white">AVC isquêmico</label>
                 </div>
@@ -116,7 +114,7 @@ export default function SideBarRight({ image, medicine, typeMedicine }: IProps) 
           <div className="w-full p-4 space-y-2">
             <h1 className="uppercase text-sm font-bold">Alertas</h1>
             <div className="w-full">
-              <span className="bg-red-500 text-white text-sm font-medium me-2 px-2.5 py-0.5 rounded">
+              <span className="bg-white text-black text-sm font-medium me-2 px-2.5 py-0.5 rounded">
                 {classify?.classe == 0 ? "AVC hemorrágico" : "AVC isquêmico"}
               </span>
             </div>

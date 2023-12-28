@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 
 import { Sidebar } from "@/components/layouts/sidebar";
 import { TableSamples } from "@/components/table-samples";
-import { Button } from "@/components/ui/button";
-
-import { UserPlus } from "lucide-react";
 
 import { database } from "@/lib/firebase/config/firebase";
 import { ref, get, onValue } from 'firebase/database';
@@ -18,8 +15,8 @@ export default function Sample() {
   const [sample, setSample] = useState<[] | any>([]);
   const contextAuth = useAuthenticationContext()
 
-  const getSampleFirebase = async () => {
-    
+  const getSampleFirebase = async (): Promise<void> => {
+
     const databaseRef = ref(database, `doctors/${contextAuth?.user?.uid}/patients`);
 
     try {
@@ -54,7 +51,7 @@ export default function Sample() {
         <div className="flex w-full justify-between">
           <span className='text-white font-bold text-2xl'>Exames - {sample.length}</span>
         </div>
-        <TableSamples data={sample}/>
+        <TableSamples data={sample} />
       </div>
     </div>
   )

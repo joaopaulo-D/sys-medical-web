@@ -8,3 +8,7 @@ export function convertTimeStampToString(timestamp: any) {
     return moment(date).format('DD/MM/YYYY HH:mm');
   }
 }
+
+export function convertDate(date: string) {
+  return moment(date).format('DD/MM/YYYY');
+}

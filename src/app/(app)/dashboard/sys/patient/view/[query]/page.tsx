@@ -13,9 +13,7 @@ import ButtonView from "@/components/layouts/button-view"
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx"
 import { database } from "@/lib/firebase/config/firebase";
 import { ref, onValue } from 'firebase/database';
-interface SegmentationResponse {
-  image: string;
-}
+import { api } from "@/lib/sys/server/api"
 
 export default function Map() {
 
@@ -26,7 +24,7 @@ export default function Map() {
 
   const contextAuth = useAuthenticationContext()
 
-  const getPatientByIdFirebase = async () => {
+  const getPatientByIdFirebase = async (): Promise<void> => {
 
     const databaseRef = ref(database, `doctors/${contextAuth?.user?.uid}/patients`);
 
@@ -53,21 +51,23 @@ export default function Map() {
     }
   }
 
-  const handleSegmentation = async (image: string) => {
+  const handleSegmentation = async (image: string): Promise<void> => {
     try {
-      const response = await fetch('https://api.saude.syslae.com.br/sys/ai/segmentation', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({ image }),
-      });
+      const response = await api.post<Blob>(
+        '/sys/ai/segmentation',
+        new URLSearchParams({ image }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          responseType: 'blob'
+        });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Erro ao processar a solicitação');
       }
 
-      const blob = await response.blob();
+      const blob = new Blob([response.data]);
       setSegmentedImage(URL.createObjectURL(blob));
     } catch (error) {
       console.error('Erro ao segmentar a imagem:', error);
@@ -127,7 +127,7 @@ export default function Map() {
             </div>
             <div className="grid grid-cols-2">
               <div key={item.id} className="w-full p-2 border-r-[1px] border-r-white">
-                <div className="flex justify-between text-yellow-500 text-sm">
+                <div className="flex justify-between text-yellow-300 text-sm">
                   <div className="flex flex-col">
                     <span>{item.patient_first_name}</span>
                     <span>{item.created_at}</span>
@@ -142,7 +142,7 @@ export default function Map() {
                 <div>
                   <img src={`${item.sample_url}`} />
                 </div>
-                <div className="flex justify-between text-yellow-500 text-sm">
+                <div className="flex justify-between text-yellow-300 text-sm">
                   <div className="flex flex-col">
                     <span>Z: 0</span>
                     <span>W: 256 L: 128</span>
@@ -154,7 +154,7 @@ export default function Map() {
                 </div>
               </div>
               <div className="w-full p-2">
-                <div className="flex justify-between text-yellow-500 text-sm">
+                <div className="flex justify-between text-yellow-300 text-sm">
                   <div className="flex flex-col">
                     <span>{item.patient_first_name} - Lacalização</span>
                     <span>{item.created_at}</span>
@@ -180,7 +180,7 @@ export default function Map() {
                         <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
                         <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
                       </div>
-                      <div className="flex justify-between text-yellow-500 text-sm">
+                      <div className="flex justify-between text-yellow-300 text-sm">
                         <div className="flex flex-col">
                           <span>Z: 0</span>
                           <span>W: 256 L: 128</span>

@@ -107,7 +107,7 @@ export function FirebaseAuthenticationContextProvider({ children }: IFirebaseAut
   }
 
   const logout = async () => {
-    const confirm = window.confirm("Você deseja realmente sair?")
+    const confirm = window.confirm(`SysLae Health${"\n"}Você deseja realmente sair?`)
 
     if (confirm) {
       await signOut(auth)

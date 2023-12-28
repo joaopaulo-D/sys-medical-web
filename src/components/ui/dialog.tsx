@@ -5,6 +5,10 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { twMerge } from 'tailwind-merge'
 
+interface IDialog extends DialogPrimitive.DialogPortalProps {
+  className?: string
+}
+
 const Dialog = DialogPrimitive.Root
 
 const DialogTrigger = DialogPrimitive.Trigger
@@ -12,7 +16,7 @@ const DialogTrigger = DialogPrimitive.Trigger
 const DialogPortal = ({
   className,
   ...props
-}: DialogPrimitive.DialogPortalProps) => (
+}: any) => (
   <DialogPrimitive.Portal className={twMerge(className)} {...props} />
 )
 DialogPortal.displayName = DialogPrimitive.Portal.displayName

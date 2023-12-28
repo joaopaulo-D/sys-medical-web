@@ -47,7 +47,7 @@ export default function SignIn() {
     <div className='grid grid-cols-1 sm:grid-cols-2 h-screen w-full'>
       <div className='bg-[#FAFCFC] flex flex-col justify-center'>
         <form onSubmit={handleSubmit(handleSignIn)} className='max-w-[400px] w-full mx-auto rounded-lg p-8 px-8 space-y-4'>
-          <h1 className="text-black text-center text-3xl"><span className="text-green-500">SysLae</span> Health</h1>
+          <h1 className="text-black text-center text-3xl"><span className="text-blue-500">SysLae</span> Health</h1>
           <h2 className='text-xl text-gray-700 text-center'>Acesse sua conta</h2>
           <div className='flex flex-col text-gray-400 py-2 space-y-1'>
             <Input
@@ -81,14 +81,14 @@ export default function SignIn() {
             ) : null}
           </div>
 
-          <Button type="submit" className="w-full bg-green-500 text-white hover:bg-green-400" variant="default">
+          <Button type="submit" className="w-full bg-blue-500 text-white hover:bg-blue-400" variant="default">
             {contextAuth?.loading ? "Carregando ..." : "Entrar"}
           </Button>
 
           <div className="flex space-x-1 justify-center text-sm">
             <span className="text-black">Esqueceu sua senha? </span>
             <Link href="/auth/reset">
-              <span className="text-green-500">Clique aqui</span>
+              <span className="text-blue-500">Clique aqui</span>
             </Link>
           </div>
 

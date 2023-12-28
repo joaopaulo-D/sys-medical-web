@@ -42,6 +42,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
   const [lastName, setLastName] = useState<string>('')
   const [age, setAge] = useState<string>('')
   const [gender, setGender] = useState<string>('')
+  const [dateOfBirth, setDateOfBirth] = useState<string>('')
   const [body, setBody] = useState<string>('')
   const [modality, setModality] = useState<string>('')
   const [medicine, setMedicine] = useState<string>('nao')
@@ -52,6 +53,12 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
   const [loading, setLoading] = useState<boolean>(false)
 
   const contextAuth = useAuthenticationContext()
+
+  const handleKeyDownForm = (event: React.KeyboardEvent<HTMLFormElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== "Enter") return
@@ -75,7 +82,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
     }
   }
 
-  const handleCreatePatient = async (event: React.FormEvent) => {
+  const handleCreatePatient = async (event: React.KeyboardEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     try {
@@ -100,6 +107,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
         patient_age: age,
         patient_gender: gender,
         patient_body: body,
+        patient_date: dateOfBirth,
         patient_modality: modality,
         patient_medicine: medicine,
         patient_typeMedicine: typeMedicine,
@@ -118,12 +126,12 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
   return (
     <DialogContent className="bg-[#222325]">
       <DialogHeader>
-        <DialogTitle>Cadastrar Paciente</DialogTitle>
+        <DialogTitle><span className="text-blue-500">SysLae</span> Health - Cadastrar Paciente</DialogTitle>
         <DialogDescription>
 
         </DialogDescription>
       </DialogHeader>
-      <form onSubmit={handleCreatePatient} className="w-full">
+      <form onSubmit={handleCreatePatient} className="w-full" onKeyDown={handleKeyDownForm}>
         <div className="flex space-x-2 mb-6">
           <div className="w-full md:w-1/2">
             <Label htmlFor="name">Primeiro Nome *</Label>
@@ -161,6 +169,17 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
             />
           </div>
           <div className="w-full md:w-1/2">
+            <Label htmlFor="name">Data de Nascimento *</Label>
+            <Input
+              className="bg-[#333232]"
+              placeholder=""
+              type="date"
+              id="date_of_birth"
+              onChange={(value) => setDateOfBirth(value.target.value)}
+              required
+            />
+          </div>
+          <div className="w-full md:w-1/2">
             <Label htmlFor="name">Sexo *</Label>
             <div>
               <Select onValueChange={(value) => setGender(value)} required>
@@ -181,7 +200,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
         </div>
         <div className="flex space-x-2 mb-6">
           <div className="w-full md:w-1/2">
-            <Label htmlFor="name">faz uso de medicamento ? *</Label>
+            <Label htmlFor="name">Faz uso de medicamento ? *</Label>
             <div>
               <Select onValueChange={(value) => setMedicine(value)} required>
                 <SelectTrigger className="bg-[#333232]">
@@ -207,11 +226,10 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
                   placeholder=""
                   type="text"
                   onKeyDown={handleKeyDown}
-                  required
                 />
                 {typeMedicine.map((tag, index) => (
                   <div className="bg-white inline-flex items-center text-sm text-black rounded mt-1 mr-1 overflow-hidden" key={index}>
-                    <span className="ml-2 leading-relaxed truncate max-w-xs px-1" x-text="tag">{index} - {tag}</span>
+                    <span className="ml-2 leading-relaxed truncate max-w-xs px-1" x-text="tag">{index+1} - {tag}</span>
                     <X color="black" size={15} onClick={() => removeTag(index)} />
                   </div>
                 ))}
@@ -278,7 +296,7 @@ export function CreatePatient({ open, setOpen }: CreateProps) {
           >
             Cancelar
           </Button>
-          <Button>Cadastrar</Button>
+          <Button>{loading ? "Carregando" : "Cadastrar"}</Button>
         </DialogFooter>
       </form>
     </DialogContent>
