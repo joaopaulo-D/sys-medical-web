@@ -20,11 +20,14 @@ import { storage, database } from "@/lib/firebase/config/firebase";
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
 import { ModalAction } from "./layouts/modals/modals-action";
 import { convertDate } from "@/lib/date";
+import { EditPatient } from "./edit-patient";
+import { Dialog } from "./ui/dialog";
+
+import { IPacient } from "@/dtos/Pacient";
 
 interface IDelete {
   patientId: string
   name_file: string
-  name_patient: string
 }
 
 export function TablePatients(props: any) {
@@ -35,16 +38,10 @@ export function TablePatients(props: any) {
   const [openModalDeleteDialog, setModalDeleteDialog] = useState<boolean>(false);
   const [dataModalDeleteDialog, setDataModalDeleteDialog] = useState<any>();
 
-  const handleEditPatient = async () => {
-    try {
+  const [openModalEditDialog, setModaEditDialog] = useState<boolean>(false);
+  const [dataModalEditDialog, setDataModalEditDialog] = useState<IPacient>();
 
-    } catch (error) {
-      console.error(error)
-      setLoading(false)
-    }
-  }
-
-  const handleDeletePetient = async ({ name_file, patientId, name_patient }: IDelete) => {
+  const handleDeletePetient = async ({ name_file, patientId }: IDelete) => {
     try {
 
       const storageRef = refStorage(storage, `samples/${name_file}`)
@@ -77,7 +74,7 @@ export function TablePatients(props: any) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {props.data.map((item: any, i: any) => (
+            {props.data.map((item: IPacient, i: any) => (
               <>
                 <TableRow key={i}>
                   <TableCell className="text-xs text-muted-foreground">
@@ -121,7 +118,7 @@ export function TablePatients(props: any) {
                         className="cursor-pointer"
                         onClick={() => {
                           setModalDeleteDialog(true)
-                          setDataModalDeleteDialog({ name_file: item.sample_name, patientId: item.id, name_patient: item.patient_first_name })
+                          setDataModalDeleteDialog({ name_file: item.sample_name, patientId: item.id })
                         }}
                       />
                     </div>
@@ -130,6 +127,26 @@ export function TablePatients(props: any) {
                         size={18}
                         color="white"
                         className="cursor-pointer"
+                        onClick={() => {
+                          setModaEditDialog(true)
+                          setDataModalEditDialog({
+                            id: item.id,
+                            sample_name: item.sample_name,
+                            sample_url: item.sample_url,
+                            sample_type: item.sample_type,
+                            sample_size: item.sample_size,
+                            patient_first_name: item.patient_first_name,
+                            patient_last_name: item.patient_last_name,
+                            patient_age: item.patient_age,
+                            patient_gender: item.patient_gender,
+                            patient_body: item.patient_body,
+                            patient_date: item.patient_date,
+                            patient_modality: item.patient_modality,
+                            patient_medicine: item.patient_medicine,
+                            patient_typeMedicine: item.patient_typeMedicine,
+                            created_at: item.created_at
+                          })
+                        }}
                       />
                     </div>
                   </TableCell>
@@ -147,6 +164,9 @@ export function TablePatients(props: any) {
             onSubimitAction={() => handleDeletePetient(dataModalDeleteDialog)}
             variant="warning"
           />
+          <Dialog open={openModalEditDialog} onOpenChange={setModaEditDialog}>
+            <EditPatient open={openModalEditDialog} setOpen={setModaEditDialog} data={dataModalEditDialog}/>
+          </Dialog>
         </Table>
       </div>
     </>

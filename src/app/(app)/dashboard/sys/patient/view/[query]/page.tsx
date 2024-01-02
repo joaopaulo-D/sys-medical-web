@@ -127,7 +127,7 @@ export default function Map() {
             </div>
             <div className="grid grid-cols-2">
               <div key={item.id} className="w-full p-2 border-r-[1px] border-r-white">
-                <div className="flex justify-between text-yellow-300 text-sm">
+                <div className="flex justify-between text-blue-300 text-sm">
                   <div className="flex flex-col">
                     <span>{item.patient_first_name}</span>
                     <span>{item.created_at}</span>
@@ -142,7 +142,7 @@ export default function Map() {
                 <div>
                   <img src={`${item.sample_url}`} />
                 </div>
-                <div className="flex justify-between text-yellow-300 text-sm">
+                <div className="flex justify-between text-blue-300 text-sm">
                   <div className="flex flex-col">
                     <span>Z: 0</span>
                     <span>W: 256 L: 128</span>
@@ -154,7 +154,7 @@ export default function Map() {
                 </div>
               </div>
               <div className="w-full p-2">
-                <div className="flex justify-between text-yellow-300 text-sm">
+                <div className="flex justify-between text-blue-300 text-sm">
                   <div className="flex flex-col">
                     <span>{item.patient_first_name} - Lacalização</span>
                     <span>{item.created_at}</span>
@@ -180,7 +180,7 @@ export default function Map() {
                         <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
                         <img src={`${item.sample_url}`} className="w-[120px] h-[120px]" />
                       </div>
-                      <div className="flex justify-between text-yellow-300 text-sm">
+                      <div className="flex justify-between text-blue-300 text-sm">
                         <div className="flex flex-col">
                           <span>Z: 0</span>
                           <span>W: 256 L: 128</span>

@@ -27,12 +27,12 @@ interface IModalAction {
 }
 
 const action = cva(
-  'w-full text-sm bg-slate-700 p-2 space-y-1',
+  'w-full text-sm bg-white p-2 space-y-1',
   {
     variants: {
       variant: {
         warning:
-          'text-orange-200',
+          'text-black',
         success:
           'text-green-200',
       },
@@ -64,7 +64,7 @@ export function ModalAction({
         </DialogHeader>
         <div className={cn(action({ variant }))}>
           <div className="flex items-center space-x-2">
-            <AlertTriangle size={14} color="white" />
+            <AlertTriangle size={14} color="red" />
             <span>Aviso</span>
           </div>
           <div className="w-full">

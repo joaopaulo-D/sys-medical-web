@@ -9,6 +9,6 @@ export function convertTimeStampToString(timestamp: any) {
   }
 }
 
-export function convertDate(date: string) {
-  return moment(date).format('DD/MM/YYYY');
+export function convertDate(date: string, full?: boolean) {
+  return full ? moment(date).format('DD/MM/YYYY HH:mm:ss') : moment(date).format('DD/MM/YYYY');
 }
