@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useContext, createContext, useEffect, useState } from "react";
 
-import { auth, database } from "@/lib/firebase/config/firebase";
+import { auth, database } from "@/infra/firebase/config/firebase";
 
 import {
   onAuthStateChanged,
@@ -18,7 +18,7 @@ import {
   serverTimestamp
 } from "firebase/database";
 
-import { Error } from "@/lib/firebase/error/error";
+import { Error } from "@/infra/firebase/error/error";
 import { useRouter } from "next/navigation";
 
 interface IFirebaseAuthenticationContextProvider {

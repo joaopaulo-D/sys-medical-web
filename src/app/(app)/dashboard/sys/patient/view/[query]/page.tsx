@@ -11,9 +11,9 @@ import SideBarRight from "@/components/layouts/sidebar-patient-right"
 import ButtonView from "@/components/layouts/button-view"
 
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx"
-import { database } from "@/lib/firebase/config/firebase";
+import { database } from "@/infra/firebase/config/firebase";
 import { ref, onValue } from 'firebase/database';
-import { api } from "@/lib/sys/server/api"
+import { api } from "@/infra/sys/server/api"
 
 export default function Map() {
 

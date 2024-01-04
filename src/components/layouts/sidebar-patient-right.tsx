@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Loader } from 'lucide-react'
 
 import { Separator } from "../ui/separator";
-import { api } from "@/lib/sys/server/api";
+import { api } from "@/infra/sys/server/api";
 import { twMerge } from "tailwind-merge";
 import { Legend } from "../ui/legend";
-import { cn } from "@/lib/utils";
+import { cn } from "@/infra/utils";
 
 interface IProps {
   image: string;

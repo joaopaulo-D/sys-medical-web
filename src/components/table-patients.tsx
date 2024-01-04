@@ -16,10 +16,10 @@ import { Badge } from "./ui/badge";
 
 import { deleteObject, ref as refStorage } from "firebase/storage";
 import { ref as refDataset, remove } from "firebase/database";
-import { storage, database } from "@/lib/firebase/config/firebase";
+import { storage, database } from "@/infra/firebase/config/firebase";
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
 import { ModalAction } from "./layouts/modals/modals-action";
-import { convertDate } from "@/lib/date";
+import { convertDate } from "@/infra/date";
 import { EditPatient } from "./edit-patient";
 import { Dialog } from "./ui/dialog";
 
@@ -129,23 +129,7 @@ export function TablePatients(props: any) {
                         className="cursor-pointer"
                         onClick={() => {
                           setModaEditDialog(true)
-                          setDataModalEditDialog({
-                            id: item.id,
-                            sample_name: item.sample_name,
-                            sample_url: item.sample_url,
-                            sample_type: item.sample_type,
-                            sample_size: item.sample_size,
-                            patient_first_name: item.patient_first_name,
-                            patient_last_name: item.patient_last_name,
-                            patient_age: item.patient_age,
-                            patient_gender: item.patient_gender,
-                            patient_body: item.patient_body,
-                            patient_date: item.patient_date,
-                            patient_modality: item.patient_modality,
-                            patient_medicine: item.patient_medicine,
-                            patient_typeMedicine: item.patient_typeMedicine,
-                            created_at: item.created_at
-                          })
+                          setDataModalEditDialog(item)
                         }}
                       />
                     </div>

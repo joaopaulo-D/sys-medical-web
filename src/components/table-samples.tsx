@@ -14,10 +14,12 @@ import {
 
 import { View } from 'lucide-react'
 import { Badge } from "./ui/badge";
-import { convertDate } from "@/lib/date";
+import { convertDate } from "@/infra/date";
+
+import { IPacient } from "@/dtos/Pacient";
 
 interface IProps {
-  data: any
+  data: IPacient[]
 }
 
 export function TableSamples(props: IProps) {
@@ -37,7 +39,7 @@ export function TableSamples(props: IProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {props.data.map((item: any, i: any) => (
+            {props.data.map((item: IPacient, i: any) => (
               <TableRow key={i}>
                 <TableCell className="text-xs text-muted-foreground">
                   {i + 1}

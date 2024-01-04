@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { storage, database } from "@/lib/firebase/config/firebase";
+import { storage, database } from "@/infra/firebase/config/firebase";
 import { ref as refStorage, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ref as refDataset, serverTimestamp, set, push, child } from 'firebase/database';
 

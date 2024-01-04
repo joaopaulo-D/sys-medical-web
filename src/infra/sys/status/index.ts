@@ -1,4 +1,4 @@
-import { api } from "@/lib/sys/server/api";
+import { api } from "@/infra/sys/server/api";
 
 export const StatusServer = async () => {
   try {

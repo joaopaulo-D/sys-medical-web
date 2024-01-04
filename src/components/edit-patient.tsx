@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { storage, database } from "@/lib/firebase/config/firebase";
+import { storage, database } from "@/infra/firebase/config/firebase";
 import { ref as refStorage, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ref as refDataset, set, push, child, update } from 'firebase/database';
 
@@ -21,7 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
 import { Label } from "./ui/label";
-import { convertDate } from "@/lib/date";
+import { convertDate } from "@/infra/date";
 import { IPacient } from "@/dtos/Pacient";
 
 type EditProps = {
@@ -99,56 +99,59 @@ export function EditPatient({ open, setOpen, data }: EditProps) {
     }
   }
 
+  const handleUploadFileStorage = async (file: any) => {
+    try {
+      const storageRef = refStorage(storage, `samples/${file.name}`);
+
+      const existingUploadFile = await getDownloadURL(storageRef).catch(error => null)
+
+      if (existingUploadFile !== null) {
+        setMessageWarining(`Exame ${file.name} cadastrado.`)
+      }
+
+      const uploadTask = uploadBytesResumable(storageRef, file)
+
+      setStatus("uploading")
+      await uploadTask;
+
+      setStatus("converting")
+      const getUrlUploadFile = await getDownloadURL(storageRef);
+      
+      return getUrlUploadFile
+
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+  }
+
   const handleEditPatient = async (event: React.KeyboardEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     try {
       setLoading(true)
 
-      setStatus("uploading")
-      if (file != null) {
-        const storageRef = refStorage(storage, `samples/${file.name}`);
+      const urlUploadStorage = file && (await handleUploadFileStorage(file));
 
-        const existingUploadFile = await getDownloadURL(storageRef).catch(error => null)
+      const updatePatientRef = child(refDataset(database), `doctors/${contextAuth?.user?.uid}/patients/${data?.id}`)
+      console.log("url: ", urlUploadStorage)
+      await update(updatePatientRef, {
+        patient_age: age || data?.patient_age,
+        patient_body: body || data?.patient_body,
+        patient_date: dateOfBirth || data?.patient_date || null,
+        patient_first_name: firstName || data?.patient_first_name,
+        patient_gender: gender || data?.patient_gender,
+        patient_last_name: lastName || data?.patient_last_name,
+        patient_medicine: medicine || data?.patient_medicine,
+        patient_modality: modality || data?.patient_modality,
+        patient_typeMedicine: typeMedicine || data?.patient_typeMedicine,
+        sample_name: file?.name || data?.sample_name || null,
+        sample_url: urlUploadStorage || data?.sample_url || null,
+        sample_type: file?.type || data?.sample_type || null,
+        sample_size: file?.size || data?.sample_size || null,
+      })
 
-        if (existingUploadFile !== null) {
-          setMessageWarining(`Exame ${file.name} cadastrado.`)
-        }
-
-        const uploadTask = uploadBytesResumable(storageRef, file)
-
-        setStatus("uploading")
-        await uploadTask;
-
-        setStatus("converting")
-        const getUrlUploadFile = await getDownloadURL(storageRef);
-
-        setUploadFileCloud(getUrlUploadFile)
-
-      } else {
-
-        setStatus("generating")
-        const updatePatientRef = child(refDataset(database), `doctors/${contextAuth?.user?.uid}/patients/${data?.id}`)
-        await update(updatePatientRef, {
-          sample_name: file?.name || data?.sample_name,
-          sample_url: uploadFileCloud || data?.sample_url,
-          sample_type: file?.type || data?.sample_type,
-          sample_size: file?.size || data?.sample_size,
-          patient_first_name: firstName || data?.patient_first_name,
-          patient_last_name: lastName || data?.patient_last_name,
-          patient_age: age || data?.patient_age,
-          patient_gender: gender || data?.patient_gender,
-          patient_body: body || data?.patient_body,
-          patient_date: dateOfBirth || data?.patient_date || null,
-          patient_modality: modality || data?.patient_modality,
-          patient_medicine: medicine || data?.patient_medicine,
-          patient_typeMedicine: typeMedicine || data?.patient_typeMedicine,
-        })
-      }
-
-      setStatus("success")
       setFile(null)
-      setStatus("waiting")
       setOpen(!open)
       setFirstName('')
       setLastName('')
@@ -160,13 +163,13 @@ export function EditPatient({ open, setOpen, data }: EditProps) {
       setMedicine('')
       setTypeMedicine([])
       setLoading(false)
+      setMessageWarining('')
+      setUploadFileCloud('')
     } catch (error) {
       console.error(error)
       setLoading(false)
     }
   }
-
-  console.log(typeMedicine)
 
   return (
     <DialogContent className="bg-[#222325]">

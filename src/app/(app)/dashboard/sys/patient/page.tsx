@@ -10,7 +10,7 @@ import { Dialog } from '@/components/ui/dialog'
 
 import { UserPlus } from "lucide-react";
 
-import { database } from "@/lib/firebase/config/firebase";
+import { database } from "@/infra/firebase/config/firebase";
 import { ref, get, onValue } from 'firebase/database';
 import { useAuthenticationContext } from "@/contexts/FirebaseAuthenticationContext.tsx";
 
