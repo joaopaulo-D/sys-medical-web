@@ -145,7 +145,10 @@ export function TablePatients(props: any) {
             text="Deletar Paciente"
             onOpenModal={openModalDeleteDialog}
             onChageModal={setModalDeleteDialog}
-            onSubimitAction={() => handleDeletePetient(dataModalDeleteDialog)}
+            onSubimitAction={() => {
+              handleDeletePetient(dataModalDeleteDialog)
+              setModalDeleteDialog(false)
+            }}
             variant="warning"
           />
           <Dialog open={openModalEditDialog} onOpenChange={setModaEditDialog}>
